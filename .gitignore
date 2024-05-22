@@ -1,5 +1,6 @@
 # dotfiles
 .vscode
 
-# virtual env
+# python stuff
+__pycache__
 venv
