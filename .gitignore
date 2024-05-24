@@ -1,4 +1,5 @@
 # dotfiles
+.DS_Store
 .vscode
 
 # python stuff
