@@ -1,5 +1,7 @@
-from config import db_connection
 from flask import Blueprint, jsonify
+
+from config import db_connection
+from modules.auth.auth import token_required
 
 tag_manage_bp = Blueprint('tag_manage', __name__)
 
@@ -7,6 +9,7 @@ db = db_connection()
 
 
 @tag_manage_bp.route('/tags/<user_id>', methods=['GET'])
+@token_required
 def get_tags(user_id):
     cursor = db.cursor()
     cursor.execute(
@@ -27,6 +30,7 @@ def get_tags(user_id):
 
 
 @tag_manage_bp.route('/tags/<photo_id>', methods=['GET'])
+@token_required
 def get_photo_tag(photo_id):
     cursor = db.cursor()
     # todo: fetch list of all tags for a picture

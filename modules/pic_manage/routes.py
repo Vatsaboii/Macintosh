@@ -1,6 +1,8 @@
-from config import db_connection
 from flask import Blueprint, jsonify, request
 import os
+
+from config import db_connection
+from modules.auth.auth import token_required
 
 pic_manage_bp = Blueprint('pic_manage', __name__)
 
@@ -8,6 +10,7 @@ db = db_connection()
 
 
 @pic_manage_bp.route('/upload', methods=['POST'])
+@token_required
 def upload_photo():
     if 'file' not in request.files:
         return jsonify({
@@ -31,6 +34,7 @@ def upload_photo():
 
 
 @pic_manage_bp.route('/delete/<photo_id>', methods=['DELETE'])
+@token_required
 def delete_photo(photo_id):
     if not photo_id:
         return jsonify({
