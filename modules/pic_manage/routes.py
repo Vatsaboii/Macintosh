@@ -62,4 +62,20 @@ def delete_photo(photo_id):
             'message': 'File not found on server'
         }), 404
 
-    # todo: delete from photos and photo_tags table
+    # todo: delete from photo_tags table
+    try:
+        cursor = db.cursor()
+        user_id = request.get_json().get('user_id')
+        cursor.execute(
+            "DELETE FROM PHOTOS WHERE user_id = %s AND photo_id = %s", (user_id, photo_id))
+        db.commit()
+        cursor.close()
+        return jsonify({
+            'message': 'Photo deleted'
+        }), 200
+
+    except Exception as e:
+        print(f"Error deleting photo: {e}")
+        return jsonify({
+            'message': 'Error deleting photo'
+        }), 500
