@@ -12,8 +12,8 @@ logging.basicConfig(level=logging.INFO)
 
 def load_detection_model(model_file, config_file):
     """Load pre-trained face detection model."""
-    logging.info(f"Loading face detection model from {
-                 model_file} and {config_file}...")
+    logging.info(f"Loading face detection model from "
+                 f"{model_file} and {config_file}...")
     if not os.path.isfile(model_file):
         logging.error(f"Model file not found: {model_file}")
         return None
@@ -100,6 +100,30 @@ def draw_boxes(image, boxes, names, color=(0, 255, 0)):
                     startY - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
 
 
+def load_age_prediction_model(model_path):
+    """Load pre-trained age prediction model."""
+    logging.info(f"Loading age prediction model from {model_path}...")
+    if not os.path.isfile(model_path):
+        logging.error(f"Age prediction model file not found: {model_path}")
+        return None
+    try:
+        age_predictor = dlib.dnn_age_prediction(model_path)
+    except Exception as e:
+        logging.error(f"Failed to load age prediction model: {str(e)}")
+        return None
+    return age_predictor
+
+
+def predict_age(age_predictor, image, face):
+    """Predict the age of the face using the age prediction model."""
+    logging.info("Predicting age...")
+    (startX, startY, endX, endY) = face
+    face_roi = image[startY:endY, startX:endX]
+    dlib_rect = dlib.rectangle(startX, startY, endX, endY)
+    age_prediction = age_predictor(image, dlib_rect)
+    return age_prediction
+
+
 def main():
     # Define paths to the pre-trained models and input image
     model_file = "res10_300x300_ssd_iter_140000.caffemodel"
@@ -107,6 +131,7 @@ def main():
     input_image_path = " "
     recognition_model_file = "dlib_face_recognition_resnet_model_v1.dat"
     shape_predictor_file = "shape_predictor_68_face_landmarks.dat"
+    age_predictor_model_file = "dnn_age_prediction.dat"
 
     try:
         # Load pre-trained models
@@ -117,96 +142,20 @@ def main():
         if recognition_model is None:
             return
         shape_predictor = dlib.shape_predictor(shape_predictor_file)
-
-        # Load known face encodings and names from existing folders
-        known_encodings = []
-        known_names = []
-        name_to_folder_map = {}
-        base_folder = "/Users/srivatsa/digiboxx/"
-
-        for person_name in os.listdir(base_folder):
-            person_folder = os.path.join(base_folder, person_name)
-            if os.path.isdir(person_folder):
-                name_to_folder_map[person_name] = person_folder
-                for file_name in os.listdir(person_folder):
-                    if file_name.endswith(".jpg"):
-                        face_image_path = os.path.join(
-                            person_folder, file_name)
-                        face_image = cv2.imread(face_image_path)
-                        if face_image is not None:
-                            face_encoding = encode_faces(recognition_model, shape_predictor, face_image, [
-                                                         (0, 0, face_image.shape[1], face_image.shape[0])])
-                            known_encodings.extend(face_encoding)
-                            known_names.extend(
-                                [person_name] * len(face_encoding))
-
-        # Read the input image
-        image = cv2.imread(input_image_path)
-        if image is None:
-            logging.error("Failed to read input image.")
+        age_predictor = load_age_prediction_model(age_predictor_model_file)
+        if age_predictor is None:
             return
 
-        # Create a copy of the original image for saving later
-        original_image = image.copy()
-
-        # Preprocess the image for face detection
-        blob = preprocess_image(image)
-
-        # Perform face detection
-        faces = detect_faces(detection_net, blob, image)
-
-        # Encode faces using the recognition model
-        face_encodings = encode_faces(
-            recognition_model, shape_predictor, image, faces)
-
-        # Recognize faces
-        recognized_names = recognize_faces(
-            face_encodings, known_encodings, known_names)
-
-        # Draw bounding boxes around detected faces and label with recognized names
-        draw_boxes(image, faces, recognized_names)
+        # Predict age for each detected face
+        for face, name in zip(faces, recognized_names):
+            if name is not None:
+                age = predict_age(age_predictor, image, face)
+                print(f"Predicted age for {name}: {age}")
 
         # Display the results
         cv2.imshow("Face Detection and Recognition", image)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
-
-        # Automatically add photos to folders based on recognition results
-        added_names = set()
-        for name in recognized_names:
-            if name is None:
-                person_name = input("Please enter the name of the person: ")
-            else:
-                person_name = name
-
-            if person_name not in added_names:
-                folder_path = os.path.join(base_folder, person_name)
-                os.makedirs(folder_path, exist_ok=True)
-                added_names.add(person_name)
-
-        # Save the original image to the appropriate folders
-        for name in recognized_names:
-            if name is not None:
-                folder_path = os.path.join(base_folder, name)
-                file_name = f"{uuid.uuid4()}.jpg"
-                image_path = os.path.join(folder_path, file_name)
-                cv2.imwrite(image_path, original_image)
-
-        # Handle unknown faces
-        for name in recognized_names:
-            if name is None:
-                person_name = input(
-                    "Please enter the name for the unknown face: ")
-                folder_path = os.path.join(base_folder, person_name)
-                os.makedirs(folder_path, exist_ok=True)
-                file_name = f"{uuid.uuid4()}.jpg"
-                image_path = os.path.join(folder_path, file_name)
-                cv2.imwrite(image_path, original_image)
-                # Add the new face to the known faces list
-                face_encoding = encode_faces(
-                    recognition_model, shape_predictor, image, faces)
-                known_encodings.extend(face_encoding)
-                known_names.extend([person_name] * len(face_encoding))
 
     except Exception as e:
         logging.error(f"An error occurred: {str(e)}")
