@@ -24,11 +24,28 @@ def load_detection_model(model_file, config_file):
     return net
 
 
-def preprocess_image(image):
+def preprocess_image(image, target_size=(100, 100)):
     """Preprocess the input image for face detection."""
     logging.info("Preprocessing image for face detection...")
-    blob = cv2.dnn.blobFromImage(cv2.resize(
-        image, (300, 300)), 1.0, (300, 300), (104.0, 177.0, 123.0))
+    (h, w) = image.shape[:2]
+
+    # Calculate the aspect ratio
+    aspect_ratio = w / h
+
+    # Determine whether to resize based on width or height
+    if aspect_ratio > 1:  # Landscape orientation
+        new_w = target_size[0]
+        new_h = int(new_w / aspect_ratio)
+    else:  # Portrait orientation or square
+        new_h = target_size[1]
+        new_w = int(new_h * aspect_ratio)
+
+    # Resize the image while maintaining the aspect ratio
+    resized_image = cv2.resize(image, (new_w, new_h))
+
+    # Create a blob for the resized image
+    blob = cv2.dnn.blobFromImage(
+        resized_image, 1.0, (new_w, new_h), (104.0, 177.0, 123.0))
     return blob
 
 
