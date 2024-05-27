@@ -1,6 +1,6 @@
 from config import db_connection
 from flask import Blueprint, jsonify, make_response, request
-from .auth import check_user, gen_token, salty_pass, validate_creds
+from .auth import check_user, gen_token, salty_pass, if_empty, validate_user
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -9,19 +9,12 @@ db = db_connection()
 
 @auth_bp.route('/api/login', methods=['POST'])
 def auth():
-
-    def user_auth(username, password):
-        cursor = db.cursor()
-        # todo: validate username and salty_pass(username,password)
-        # cursor.execute()
-        return True
-
     data = request.get_json()
     username = data['username']
     password = data['password']
 
-    # validate_creds() only returns when there's an error
-    not_valid = validate_creds(username, password)
+    # if_empty() only returns when there's an error
+    not_valid = if_empty(username, password)
     if not_valid:
         return not_valid
 
@@ -31,7 +24,7 @@ def auth():
             'isSuccessful': False
         }), 401
 
-    if user_auth(username, password):
+    if validate_user(username, password):
         token = gen_token(username)
         response = make_response(jsonify({
             'message': 'logged in',
@@ -50,15 +43,24 @@ def auth():
 def signup():
 
     def add_user(username, hashed_pass):
-        # todo: insert username and hashed_pass in db
-        return
+        cursor = db.cursor()
+        try:
+            cursor.execute(
+                "INSERT INTO users (username, password) VALUES (%s, %s)", (username, hashed_pass))
+            db.commit()
+            cursor.close()
+            return True
+        except Exception as e:
+            db.rollback()
+            cursor.close()
+            return False
 
     data = request.get_json()
     username = data['username']
     password = data['password']
 
-    # validate_creds() only returns when there's an error
-    not_valid = validate_creds(username, password)
+    # if_empty() only returns when there's an error
+    not_valid = if_empty(username, password)
     if not_valid:
         return not_valid
 
@@ -69,8 +71,13 @@ def signup():
         }), 409
 
     hashed_pass = salty_pass(username, password)
-    if (add_user(username, hashed_pass)):
+    if add_user(username, hashed_pass):
         return jsonify({
             'message': 'signed up',
             'isSuccessful': True
         }), 201
+    else:
+        return jsonify({
+            'message': 'error signing up',
+            'isSuccessful': False
+        }), 500
