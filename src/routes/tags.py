@@ -1,13 +1,11 @@
+from config import db
 from flask import Blueprint, jsonify
-from config import db_connection
-from modules.auth.auth import token_required
+from src.utils.auth_utils import token_required
 
-tag_manage_bp = Blueprint('tag_manage', __name__)
-
-db = db_connection()
+tags_bp = Blueprint('tag_manage', __name__)
 
 
-@tag_manage_bp.route('/tags/user/<user_id>', methods=['GET'])
+@tags_bp.route('/tags/user/<user_id>', methods=['GET'])
 @token_required
 def get_tags(user_id):
     cursor = db.cursor()
@@ -29,7 +27,7 @@ def get_tags(user_id):
     }), 200
 
 
-@tag_manage_bp.route('/tags/photo/<photo_id>', methods=['GET'])
+@tags_bp.route('/tags/photo/<photo_id>', methods=['GET'])
 @token_required
 def get_photo_tags(photo_id):
     cursor = db.cursor()

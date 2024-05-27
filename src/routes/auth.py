@@ -1,10 +1,8 @@
-from config import db_connection
+from config import db
 from flask import Blueprint, jsonify, make_response, request
-from .auth import check_user, gen_token, salty_pass, if_empty, validate_user
+from src.utils.auth_utils import check_user, gen_token, if_empty, salty_pass, validate_user
 
 auth_bp = Blueprint('auth', __name__)
-
-db = db_connection()
 
 
 @auth_bp.route('/api/login', methods=['POST'])

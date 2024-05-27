@@ -8,3 +8,6 @@ def db_connection():
         passwd="password",
         database="macintosh"
     )
+
+
+db = db_connection()

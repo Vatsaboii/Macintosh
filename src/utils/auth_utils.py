@@ -34,7 +34,7 @@ def token_required(f):
     return decorated_function
 
 
-def is_empty(username, password):
+def if_empty(username, password):
     if not username or not password:
         if not username:
             message = 'username cannot be empty'
