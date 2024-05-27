@@ -11,14 +11,12 @@ pictures_bp = Blueprint('pictures', __name__)
 def upload_photo():
     if 'file' not in request.files:
         return jsonify({
-            'message': 'File empty',
-            'isSuccessful': False
+            'message': 'File empty'
         }), 400
 
     if not request.get_json() or 'user_id' not in request.get_json():
         return jsonify({
-            'message': 'user_id not provided',
-            'isSuccessful': False
+            'message': 'user_id not provided'
         }), 400
 
     user_id = request.form['user_id']
@@ -29,13 +27,11 @@ def upload_photo():
         res_data = model(user_id, file)
         return jsonify({
             'message': 'Photo uploaded successfully',
-            'isSuccessful': True,
             'data': res_data
         }), 201
     except Exception as e:
         return jsonify({
-            'message': f'Error uploading photo: {e}',
-            'isSuccessful': False
+            'message': f'Error uploading photo: {e}'
         }), 500
 
 
@@ -44,8 +40,7 @@ def upload_photo():
 def delete_photo(photo_id):
     if not photo_id:
         return jsonify({
-            'message': 'photo_id not provided',
-            'isSuccessful': False
+            'message': 'photo_id not provided'
         }), 400
 
     cursor = db.cursor(dictionary=True)
@@ -56,8 +51,7 @@ def delete_photo(photo_id):
 
     if not photo:
         return jsonify({
-            'message': 'Photo not found',
-            'isSuccessful': False
+            'message': 'Photo not found'
         }), 404
 
     photo_path = photo['photo_path']
@@ -66,8 +60,7 @@ def delete_photo(photo_id):
         os.remove(photo_path)
     else:
         return jsonify({
-            'message': 'File not found on server',
-            'isSuccessful': False
+            'message': 'File not found on server'
         }), 404
 
     try:
@@ -81,12 +74,10 @@ def delete_photo(photo_id):
         cursor.close()
         return jsonify({
             'message': 'Photo deleted',
-            'isSuccessful': True
         }), 200
     except Exception as e:
         db.rollback()
         cursor.close()
         return jsonify({
-            'message': f'Error deleting photo: {e}',
-            'isSuccessful': False
+            'message': f'Error deleting photo: {e}'
         }), 500

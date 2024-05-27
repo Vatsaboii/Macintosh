@@ -22,8 +22,7 @@ def get_tags(user_id):
         })
 
     return jsonify({
-        'tags': tag_list,
-        'isSuccessful': True
+        'tags': tag_list
     }), 200
 
 
@@ -46,6 +45,5 @@ def get_photo_tags(photo_id):
         })
 
     return jsonify({
-        'tags': tag_list,
-        'isSuccessful': True
+        'tags': tag_list
     }), 200
