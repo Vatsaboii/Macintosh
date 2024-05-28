@@ -2,6 +2,7 @@ from config import db
 from flask import Blueprint, jsonify, request
 import os
 from src.utils.auth_utils import token_required
+from src.utils.file_utils import move_file, random_hash
 
 pictures_bp = Blueprint('pictures', __name__)
 
@@ -23,12 +24,33 @@ def upload_photo():
     file = request.files['file']
 
     try:
-        # todo: import model method
-        res_data = model(username, file)
-        return jsonify({
-            'message': 'Photo uploaded successfully',
-            'data': res_data
-        }), 201
+        destination = move_file(username, file)
+        photo_id = random_hash()
+
+        # todo: return a list of tags with model method
+        tags = model(username, file)
+
+        with db.cursor() as cursor:
+            cursor.execute(
+                "INSERT INTO photos (username, photo_path) VALUES (%s, %s)", (username, destination))
+            photo_id = cursor.lastrowid
+        db.commit()
+
+        for tag in tags:
+            with db.cursor() as cursor:
+                cursor.execute(
+                    "INSERT IGNORE INTO tags (tag_name, username) VALUES (%s, %s)", (tag, username))
+                tag_id = cursor.lastrowid
+                cursor.execute(
+                    "INSERT IGNORE INTO photo_tags (photo_id, tag_id) VALUES (%s, %s)", (photo_id, tag_id))
+            db.commit()
+
+        response = jsonify({
+            'photo_id': photo_id,
+            'photo_path': destination,
+            'tags': tags,
+        })
+        return response, 200
     except Exception as e:
         return jsonify({
             'message': f'Error uploading photo: {e}'

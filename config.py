@@ -1,6 +1,7 @@
 import mysql.connector
 
 
+# database connection
 def db_connection():
     return mysql.connector.connect(
         host="127.0.0.1",
@@ -11,3 +12,6 @@ def db_connection():
 
 
 db = db_connection()
+
+# upload directory
+UPLOAD_DIR = "uploads"
