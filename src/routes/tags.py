@@ -5,12 +5,12 @@ from src.utils.auth_utils import token_required
 tags_bp = Blueprint('tag_manage', __name__)
 
 
-@tags_bp.route('/tags/user/<user_id>', methods=['GET'])
+@tags_bp.route('/tags/user/<username>', methods=['GET'])
 @token_required
-def get_tags(user_id):
+def get_tags(username):
     cursor = db.cursor()
     cursor.execute(
-        "SELECT tag_id, tag_name FROM tags WHERE user_id = %s", (user_id,))
+        "SELECT tag_id, tag_name FROM tags WHERE username = %s", (username,))
     tags = cursor.fetchall()
     cursor.close()
 

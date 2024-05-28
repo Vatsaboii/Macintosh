@@ -1,23 +1,22 @@
 -- @block users table
 CREATE TABLE users (
-    user_id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(255) NOT NULL UNIQUE,
+    username VARCHAR(255) PRIMARY KEY,
     password VARCHAR(255) NOT NULL
 );
 -- @block photos table
 CREATE TABLE photos (
     photo_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
+    username VARCHAR(255),
     photo_path VARCHAR(255) NOT NULL,
     upload_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    FOREIGN KEY (username) REFERENCES users(username)
 );
 -- @block tags table
 CREATE TABLE tags (
     tag_id INT AUTO_INCREMENT PRIMARY KEY,
     tag_name VARCHAR(255) NOT NULL,
-    user_id INT,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    username VARCHAR(255),
+    FOREIGN KEY (username) REFERENCES users(username)
 );
 -- @block photos_tags table
 CREATE TABLE photo_tags (

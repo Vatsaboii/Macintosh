@@ -14,17 +14,17 @@ def upload_photo():
             'message': 'File empty'
         }), 400
 
-    if not request.get_json() or 'user_id' not in request.get_json():
+    if not request.get_json() or 'username' not in request.get_json():
         return jsonify({
-            'message': 'user_id not provided'
+            'message': 'Username not provided'
         }), 400
 
-    user_id = request.form['user_id']
+    username = request.get_json()['username']
     file = request.files['file']
 
     try:
         # todo: import model method
-        res_data = model(user_id, file)
+        res_data = model(username, file)
         return jsonify({
             'message': 'Photo uploaded successfully',
             'data': res_data
@@ -65,11 +65,11 @@ def delete_photo(photo_id):
 
     try:
         cursor = db.cursor()
-        user_id = request.get_json().get('user_id')
+        username = request.get_json().get('username')
         cursor.execute(
             "DELETE FROM photo_tags WHERE photo_id = %s", (photo_id,))
         cursor.execute(
-            "DELETE FROM photos WHERE user_id = %s AND photo_id = %s", (user_id, photo_id))
+            "DELETE FROM photos WHERE username = %s AND photo_id = %s", (username, photo_id))
         db.commit()
         cursor.close()
         return jsonify({
