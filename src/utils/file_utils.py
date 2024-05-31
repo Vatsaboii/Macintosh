@@ -3,6 +3,7 @@ import hashlib
 import base64
 import time
 import os
+from werkzeug.utils import secure_filename
 
 
 def random_hash():
@@ -16,6 +17,7 @@ def random_hash():
 def move_file(username, file):
     user_dir = os.path.join(UPLOAD_DIR, username)
     os.makedirs(user_dir, exist_ok=True)
-    destination = os.path.join(user_dir, file.filename)
+    filename = secure_filename(file.filename)
+    destination = os.path.join(user_dir, filename)
     file.save(destination)
     return destination
