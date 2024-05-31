@@ -1,0 +1,205 @@
+.navbar-custom{
+    background-color:#0E46A3; !important
+    position: fixed;
+    width: 100%;
+}
+.search-custom{
+    background-color:white;
+}
+.image-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.gallery {
+  border: 1px solid #fff; /* Add thin white border */
+  overflow: hidden;
+  padding: 3px; /* Add padding for space between images */
+  position: relative;
+}
+
+.gallery:hover {
+  border: 1px solid #777;
+}
+
+.gallery img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 1px solid #fff; /* Add thin white border around images */
+  margin: -1px; /* Compensate for border to maintain consistent spacing */
+}
+
+.heart {
+  position: absolute;
+  top: 10px; /* Adjust position as needed */
+  left: 10px; /* Adjust position as needed */
+  font-size: 50px; /* Adjust size as needed */
+  color: red;
+  opacity: 1; /* Adjust opacity as needed */
+}
+
+.responsive {
+  padding: 0;
+  width: calc(25% - 8px); /* Adjust width to include border and space */
+  margin: 4px; /* Adjust margin for space between images */
+  box-sizing: border-box;
+}
+
+@media only screen and (max-width: 700px) {
+  .responsive {
+      width: calc(50% - 8px);
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .responsive {
+      width: calc(100% - 8px);
+  }
+}
+
+.clearfix::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Added to ensure consistent padding */
+.gallery .col-4 {
+  padding: 0; /* Changed to 0 to avoid extra padding */
+}
+
+.gallery .row {
+  margin: 0; /* Changed to 0 to avoid extra margin */
+}
+/* Gradient background for the footer */
+/* Gradient background for the footer */
+/* Gradient background for the footer */
+.footer {
+    background: linear-gradient(270deg, #1652b3, #1658c1);
+    background-size: 180% 180%;
+    animation: gradient-animation 18s ease infinite;
+    padding: 40px 0;
+    color: #fff;
+  }
+  
+  @keyframes gradient-animation {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
+  .footer h5 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #fff;
+  }
+  
+  .footer p, .footer ul, .footer form, .footer .certifications {
+    margin-bottom: 20px;
+    color: #fff;
+  }
+  
+  .footer .footer-links {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .footer .footer-links li {
+    margin-bottom: 10px;
+  }
+  
+  .footer .footer-links a {
+    text-decoration: none;
+    color: #000; /* Changed link color to black */
+    transition: color 0.3s ease; /* Smooth transition for color change */
+  }
+  
+  .footer .footer-links a:hover {
+    text-decoration: none; /* Ensure no underline on hover */
+    color: #555; /* Slightly lighter black for hover state */
+  }
+  
+  .footer .certifications {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap; /* Ensure images wrap if necessary */
+  }
+  
+  .footer .certification {
+    width: auto;
+    max-width: 80px; /* Ensure a maximum width for the images */
+    height: auto;
+  }
+  
+  .footer .subscribe-form {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .footer .subscribe-form input {
+    flex: 1;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .footer .subscribe-form button {
+    padding: 5px 10px;
+    background-color: #000;
+    color: #fff; /* Ensure text is visible */
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease; /* Smooth transition for background color */
+  }
+  
+  .footer .subscribe-form button:hover {
+    background-color: #444; /* Darker background color on hover */
+  }
+  
+  .footer .app-links a {
+    display: inline-block;
+    margin-right: 10px;
+  }
+  
+  .footer .app-links img {
+    width: 120px;
+    height: auto;
+  }
+  
+  .footer .social-media a {
+    display: inline-block;
+    margin: 0 5px;
+    transition: transform 0.3s ease; /* Smooth transition for scale effect */
+  }
+  
+  .footer .social-media a:hover {
+    transform: scale(1.2); /* Slightly enlarge icons on hover */
+  }
+  
+  .footer .social-media img {
+    width: 24px;
+    height: auto;
+  }
+  
+  .footer .text-center {
+    text-align: center;
+  }
+  
+  .footer p {
+    margin: 0;
+  }
+  
+  .footer p.social-media {
+    margin-bottom: 20px;
+  }
+  .footer a{
+    color: whitesmoke;
+      }

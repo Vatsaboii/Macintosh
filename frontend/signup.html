@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Signup</title>
+        <link rel="stylesheet" href="css/signup.css" />
+    </head>
+    <body>
+        <div class="container">
+            <h2>SIGN UP</h2>
+            <form id="signupform">
+                <label for="signupUsername">Username:</label>
+                <input type="text" id="signupUsername" required />
+
+                <label for="signupEmail">Email:</label>
+                <input type="text" id="signupEmail" required />
+
+                <label for="signupPassword">Password:</label>
+                <div class="password-field">
+                    <input type="password" id="signupPassword" required />
+                    <span class="password-toggle" onclick="togglePassword('signupPassword')">Show</span>
+                </div>
+
+                <label for="signupConfirmPassword">Confirm Password :</label>
+                <div class="password-field">
+                    <input type="password" id="signupConfirmPassword" required />
+                    <span class="password-toggle" onclick="togglePassword('signupConfirmPassword')">Show</span>
+                </div>
+                <label> <input type="checkbox" id="signupTerms" required />I agree to the terms and conditions. </label>
+                <button type="submit">Signup</button>
+            </form>
+            <p id="message"></p>
+        </div>
+        <script src="js/signup.js"></script>
+    </body>
+</html>

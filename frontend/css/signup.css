@@ -1,0 +1,67 @@
+body{
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #003285;
+}
+.container{
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    width: 300px;
+    text-align: center;
+}
+h2{
+    margin-bottom: 20px;
+}
+label{
+    display: block;
+    margin-bottom: 5px;
+    text-align: left;
+}
+input[type="text"],
+input[type="email"],
+input[type="password"]{
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;   
+}
+input[type="checkbox"]{
+    margin-bottom: 20px;
+}
+button{
+    width: 100%;
+    padding: 10px;
+    background-color: #007BFF;
+    border: none;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+button :hover{
+    background-color: #0056b3;
+}
+#message{
+    margin-top: 20px;
+}
+.password-field {
+    position: relative;
+}
+
+.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #007BFF;
+}
+
+.password-toggle:hover {
+    color: #0056b3;
+}
