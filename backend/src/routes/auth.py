@@ -5,7 +5,7 @@ from src.utils.auth_utils import check_user, gen_token, if_empty, salty_pass, va
 auth_bp = Blueprint('auth', __name__)
 
 
-@auth_bp.route('/api/login', methods=['POST'])
+@auth_bp.route('/login', methods=['POST'])
 def auth():
     data = request.get_json()
     username = data['username']
@@ -34,7 +34,7 @@ def auth():
         }), 401
 
 
-@auth_bp.route('/api/signup', methods=['POST'])
+@auth_bp.route('/signup', methods=['POST'])
 def signup():
 
     def add_user(username, hashed_pass):
