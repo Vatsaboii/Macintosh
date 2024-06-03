@@ -1,3 +1,5 @@
+const URL = "http://127.0.0.1:5000/api";
+
 function togglePassword(inputId) {
     const inputField = document.getElementById(inputId);
     const passwordToggle = document.querySelector(`#${inputId} + .password-toggle`);
@@ -11,7 +13,7 @@ function togglePassword(inputId) {
     }
 }
 
-document.getElementById("signupform").addEventListener("submit", function (e) {
+document.getElementById("signupform").addEventListener("submit", async function (e) {
     e.preventDefault();
 
     const username = document.getElementById("signupUsername").value;
@@ -36,10 +38,27 @@ document.getElementById("signupform").addEventListener("submit", function (e) {
         return;
     }
 
-    localStorage.setItem("username", username);
-    localStorage.setItem("email", email);
-    localStorage.setItem("password", password);
+    const jsonData = {
+        username: `${username}`,
+        password: `${password}`,
+    };
 
-    messageElement.textContent = "Signup successful!";
-    messageElement.style.color = "green";
+    const response = await fetch(`${URL}/signup`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(jsonData),
+    });
+
+    const data = await response.json();
+
+    if (response.code == 200) {
+        localStorage.setItem("email", email);
+        messageElement.textContent = "Signup successful!";
+        messageElement.style.color = "green";
+    } else {
+        messageElement.textContent = `${data["message"]}`;
+        messageElement.style.color = "red";
+    }
 });
