@@ -1,4 +1,4 @@
-body{
+body {
     font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
@@ -6,49 +6,40 @@ body{
     height: 100vh;
     background-color: #003285;
 }
-.container{
+
+.container {
     background: white;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 300px;
     text-align: center;
 }
-h2{
+
+h2 {
     margin-bottom: 20px;
 }
-label{
+
+label {
     display: block;
     margin-bottom: 5px;
     text-align: left;
 }
+
 input[type="text"],
 input[type="email"],
-input[type="password"]{
-    width: 100%;
+input[type="password"] {
+    width: calc(100% - 24px);
     padding: 8px;
     margin-bottom: 20px;
     border: 1px solid #ccc;
-    border-radius: 4px;   
-}
-input[type="checkbox"]{
-    margin-bottom: 20px;
-}
-button{
-    width: 100%;
-    padding: 10px;
-    background-color: #007BFF;
-    border: none;
-    color: white;
     border-radius: 4px;
-    cursor: pointer;
 }
-button :hover{
-    background-color: #0056b3;
+
+.input-group {
+    position: relative;
 }
-#message{
-    margin-top: 20px;
-}
+
 .password-field {
     position: relative;
 }
@@ -59,9 +50,46 @@ button :hover{
     right: 10px;
     transform: translateY(-50%);
     cursor: pointer;
-    color: #007BFF;
+    color: #007bff;
 }
 
 .password-toggle:hover {
     color: #0056b3;
+}
+
+.button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#message {
+    margin-top: 20px;
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+}
+
+.form-check-input {
+    margin-right: 5px;
+}
+
+.terms-space {
+    height: 20px;
 }
