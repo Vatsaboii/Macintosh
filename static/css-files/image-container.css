@@ -1,0 +1,94 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+    width: 260px;
+    margin-top: 10px;
+  }
+
+  .card-image {
+    position: relative;
+    width: 260px;
+  }
+
+  .card-image .main-photo {
+    border-radius: 0.25rem;
+    width: 260px;
+    height: 200px;
+    object-fit: cover;
+    aspect-ratio: 4/3;
+  }
+
+  .card-actions {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .card-title {
+    font-weight: 600;
+    color: #4a5568;
+  }
+
+  .card-subtitle {
+    font-size: 0.875rem;
+    color: #6b7280;
+  }
+
+  .icon-button {
+  position: absolute;
+    
+  border: none;
+  cursor: pointer;
+
+  background: none;
+  
+  
+ 
+  }
+
+  .icon-button svg {
+    color: #cbd5e0;
+  }
+
+  .checkbox-container {
+    display: flex;
+    align-items: center;
+  }
+  .star-menu{
+      display: flex;
+      justify-content: space-between;
+      width: 230px;
+      position: absolute;
+      top:2px;
+      
+  }
+  .card-details{
+      display: flex;
+      justify-content: baseline;
+      flex-direction: column;
+  }
+  .card-content{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+  @media (min-width: 768px){
+    .card-content{
+    grid-template-columns: repeat(4,1fr);
+    }
+  }
+  @media (max-width: 768px){
+ 
+.card-content{
+  grid-template-columns: repeat(1, 1fr);
+  justify-items: center;
+}
+
+
+  }
