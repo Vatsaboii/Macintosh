@@ -4,16 +4,26 @@ import logging
 import dlib
 import os
 import uuid
-
-from src.utils.file_utils import random_hash
+import hashlib
+import base64
+import time
+import os
 
 logging.basicConfig(level=logging.INFO)
 
 
+def random_hash():
+    timestamp = str(time.time())
+    hashed = hashlib.sha256(timestamp.encode()).digest()
+    encoded = base64.b64encode(hashed)
+    result = ''.join(char for char in encoded.decode() if char.isalnum())[:6]
+    return result
+
+
 def load_detection_model(model_file, config_file):
     """Load pre-trained face detection model."""
-    logging.info(f"Loading face detection model from 
-                 {model_file} and {config_file}...")
+    logging.info(f"Loading face detection model from {model_file} and "
+                 f"{config_file}...")
     if not os.path.isfile(model_file):
         logging.error(f"Model file not found: {model_file}")
         return None
@@ -103,10 +113,9 @@ def draw_boxes(image, boxes, names, color=(0, 255, 0)):
                     startY - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
 
 
-def main():
+def main(input_image_path, base_folder):
     model_file = "res10_300x300_ssd_iter_140000.caffemodel"
     config_file = "deploy.prototxt.txt"
-    input_image_path = ""
     recognition_model_file = "dlib_face_recognition_resnet_model_v1.dat"
     shape_predictor_file = "shape_predictor_68_face_landmarks.dat"
 
@@ -122,14 +131,13 @@ def main():
         known_encodings = []
         known_names = []
         name_to_folder_map = {}
-        base_folder = "/Users/srivatsa/digiboxx/"
 
         for person_name in os.listdir(base_folder):
             person_folder = os.path.join(base_folder, person_name)
             if os.path.isdir(person_folder):
                 name_to_folder_map[person_name] = person_folder
                 for file_name in os.listdir(person_folder):
-                    if file_name.endswith(".jpg"):
+                    if file_name.endswith(".jpg") or file_name.endswith(".jpeg") or file_name.endswith('.png'):
                         face_image_path = os.path.join(
                             person_folder, file_name)
                         face_image = cv2.imread(face_image_path)
@@ -182,9 +190,16 @@ def main():
             # Save the image of the detected face
             (startX, startY, endX, endY) = faces[i]
             face_image = original_image[startY:endY, startX:endX]
-            file_name = f"{uuid.uuid4()}.jpg"
-            image_path = os.path.join(folder_path, file_name)
-            cv2.imwrite(image_path, face_image)
+            face_file_name = f"{uuid.uuid4()}.jpg"
+            face_image_path = os.path.join(folder_path, face_file_name)
+            cv2.imwrite(face_image_path, face_image)
+
+            # Save the original image in the person's folder
+            original_image_name = f"original_{uuid.uuid4()}.jpg"
+            original_image_path = os.path.join(
+                folder_path, original_image_name)
+            if not os.path.exists(original_image_path):
+                cv2.imwrite(original_image_path, original_image)
 
             # Add the new face to the known faces list if it was unknown
             if name is None:
@@ -200,6 +215,7 @@ def main():
 
 
 if __name__ == "__main__":
-    tags = main()
+    tags = main(input_image_path='test.jpg',
+                base_folder='uploads/testuser')
     if tags:
         print("Tags from the photo:", tags)
