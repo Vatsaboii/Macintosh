@@ -1,0 +1,4 @@
+dlib==19.24.4
+imutils==0.5.4
+numpy==1.26.4
+opencv-python-headless==4.10.0.82
